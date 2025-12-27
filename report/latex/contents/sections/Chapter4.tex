@@ -1,0 +1,72 @@
+\chapter{Results and Conclusion}
+
+\section{Model Performance}
+
+Table \ref{tab:performance} shows the model's performance on training and test sets.
+
+\begin{table}[H]
+\centering
+\caption{Model Performance Metrics}
+\label{tab:performance}
+\begin{tabular}{llll}
+\toprule
+\textbf{Metric} & \textbf{Training} & \textbf{Test} & \textbf{Gap} \\
+\midrule
+MAE & 3.41 $\mu$g/m$^3$ & 5.93 $\mu$g/m$^3$ & +2.52 \\
+RMSE & 5.88 $\mu$g/m$^3$ & 8.09 $\mu$g/m$^3$ & +2.21 \\
+R$^2$ & 0.74 & 0.17 & -0.57 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Metric Explanations}
+
+\begin{itemize}
+    \item \textbf{MAE (Mean Absolute Error)}: Average prediction error in $\mu$g/m$^3$. Training MAE of 3.41 means predictions are off by $\sim$3.4 units on average.
+    \item \textbf{RMSE (Root Mean Squared Error)}: Penalizes larger errors more heavily. Higher RMSE indicates some predictions have significant errors.
+    \item \textbf{R$^2$ (Coefficient of Determination)}: Measures how much variance the model explains. Training R$^2$=0.74 means 74\% of PM2.5 variation is captured; positive test R$^2$ (0.17) indicates the model has some predictive power on unseen data.
+\end{itemize}
+
+\section{Actual vs Predicted}
+
+Figure \ref{fig:actual_vs_predicted} compares actual PM2.5 values (blue) with model predictions (orange) for both training and test sets. The training plot shows predictions closely tracking actual values, demonstrating the model learned the underlying patterns. However, the test plot reveals a generalization gap---the model struggles to capture the full variability of unseen data, often predicting values closer to the mean.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]{Images/actual_vs_predicted.png}
+    \caption{Actual vs predicted PM2.5 values for training and test sets.}
+    \label{fig:actual_vs_predicted}
+\end{figure}
+
+\section{24-Hour Forecast}
+
+Figure \ref{fig:forecast} shows the 24-hour ahead forecast using the most recent data. The chart overlays the predicted next 24 hours (orange) on top of the last 72 hours of actual data (blue). The forecast predicts stable PM2.5 values around 6.6--7.2 $\mu$g/m$^3$, which falls in the ``Good'' air quality category according to EPA standards.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]{Images/24hour_forecast.png}
+    \caption{24-hour ahead PM2.5 forecast overlaid on recent historical data.}
+    \label{fig:forecast}
+\end{figure}
+
+\section{Conclusion}
+
+The LSTM model successfully learns temporal patterns in the training data (R$^2$ = 0.74), demonstrating that air quality prediction using deep learning is feasible. However, the gap on test data (R$^2$ = 0.17) indicates challenges with generalization, possibly due to:
+
+\begin{itemize}
+    \item Seasonal or event-based pollution patterns not seen in training
+    \item Limited six-month training window
+    \item Need for additional features (traffic data, fire events, etc.)
+\end{itemize}
+
+\section{Future Work}
+
+Future improvements could include:
+
+\begin{itemize}
+    \item \textbf{Extended Data}: Collect longer historical period (1--2 years) to capture seasonal patterns
+    \item \textbf{Additional Features}: Include traffic data, wildfire events, and industrial activity
+    \item \textbf{Alternative Architectures}: Explore Transformer models or Temporal Convolutional Networks
+    \item \textbf{Ensemble Methods}: Combine LSTM with gradient boosting (XGBoost, LightGBM)
+    \item \textbf{Multi-station Learning}: Train on data from multiple monitoring stations
+\end{itemize}

@@ -1,0 +1,87 @@
+\chapter{Model Architecture}
+
+\section{Why LSTM?}
+
+Long Short-Term Memory (LSTM) networks are a type of recurrent neural network (RNN) specifically designed for sequential data. They excel at air quality prediction because:
+
+\begin{enumerate}
+    \item \textbf{Temporal dependencies}: Air pollution at any hour depends on conditions from previous hours---LSTM's memory cells capture these temporal patterns
+    \item \textbf{Long-range patterns}: Unlike standard RNNs, LSTMs can learn relationships spanning many time steps (e.g., pollution buildup over 24 hours)
+    \item \textbf{Non-linear relationships}: LSTMs model complex interactions between weather, traffic patterns, and pollution that linear models cannot capture
+\end{enumerate}
+
+\section{Network Architecture}
+
+The LSTM model architecture consists of the following layers:
+
+\begin{itemize}
+    \item \textbf{Input}: 24-hour lookback window $\times$ 24 features (the model ``sees'' the last 24 hours to predict the next hour)
+    \item \textbf{LSTM(64)}: First LSTM layer with 64 hidden units learns complex temporal patterns
+    \item \textbf{Dropout(0.2)}: Randomly drops 20\% of connections during training to prevent overfitting
+    \item \textbf{LSTM(32)}: Second LSTM layer with 32 units further refines temporal representations
+    \item \textbf{Dropout(0.2)}: Additional regularization layer
+    \item \textbf{Dense(32, ReLU)}: Fully connected layer transforms LSTM output for prediction
+    \item \textbf{Dense(1)}: Output layer produces the single PM2.5 prediction
+\end{itemize}
+
+\textbf{Total Parameters}: $\sim$36,000 trainable weights
+
+\section{Training Configuration}
+
+\begin{table}[H]
+\centering
+\caption{Training Configuration Parameters}
+\label{tab:training_config}
+\begin{tabular}{ll}
+\toprule
+\textbf{Parameter} & \textbf{Value} \\
+\midrule
+Optimizer & Adam \\
+Learning Rate & $1 \times 10^{-3}$ \\
+Loss Function & Mean Squared Error (MSE) \\
+Metrics & MAE, MSE \\
+Batch Size & 32 \\
+Max Epochs & 100 \\
+Validation Split & 20\% of training data \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Regularization Strategies}
+
+\begin{itemize}
+    \item \textbf{Dropout}: 0.2 rate after each LSTM and Dense layer
+    \item \textbf{EarlyStopping}: Patience of 15 epochs, restores best weights
+    \item \textbf{ReduceLROnPlateau}: Factor of 0.5, patience of 5 epochs
+\end{itemize}
+
+\section{Sequence Configuration}
+
+\begin{table}[H]
+\centering
+\caption{Sequence Configuration}
+\label{tab:sequence_config}
+\begin{tabular}{ll}
+\toprule
+\textbf{Parameter} & \textbf{Value} \\
+\midrule
+Lookback Window & 24 hours \\
+Prediction Horizon & 1 hour ahead \\
+Total Sequences & 4,907 \\
+Train/Test Split & 70\% / 30\% \\
+Training Samples & 3,434 \\
+Test Samples & 1,473 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Training Progress}
+
+Figure \ref{fig:training_loss} shows the training and validation loss over epochs. The decreasing curves demonstrate that the model is learning effectively. The gap between training and validation loss indicates some overfitting---the model fits training data better than held-out validation data. Early stopping (patience=15) prevented excessive overfitting by stopping training when validation loss stopped improving.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{Images/training_loss_curves.png}
+    \caption{Training and validation loss over epochs.}
+    \label{fig:training_loss}
+\end{figure}

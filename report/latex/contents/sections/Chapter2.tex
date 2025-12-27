@@ -1,0 +1,117 @@
+\chapter{Data Collection}
+
+\section{Data Sources}
+
+\subsection{OpenAQ API v3 - Air Quality Data}
+
+OpenAQ provides open-access air quality data from government-operated monitoring stations worldwide. Table \ref{tab:pollutants} shows the collected parameters.
+
+\begin{table}[H]
+\centering
+\caption{Collected Air Quality Parameters from OpenAQ}
+\label{tab:pollutants}
+\begin{tabular}{llll}
+\toprule
+\textbf{Parameter} & \textbf{Units} & \textbf{Purpose} & \textbf{Sensor ID} \\
+\midrule
+PM2.5 & $\mu$g/m$^3$ & Target variable & 25196 \\
+PM10 & $\mu$g/m$^3$ & Strong predictor & 25195 \\
+NO$_2$ & ppm & Traffic pollution & 25192 \\
+SO$_2$ & ppm & Industrial source & 25194 \\
+CO & ppm & Combustion indicator & 23019 \\
+O$_3$ & ppm & Atmospheric chemistry & 25193 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Open-Meteo API - Weather Data}
+
+Open-Meteo provides free historical and forecast weather data without API key requirements. Table \ref{tab:weather} shows the collected weather variables.
+
+\begin{table}[H]
+\centering
+\caption{Collected Weather Variables from Open-Meteo}
+\label{tab:weather}
+\begin{tabular}{ll}
+\toprule
+\textbf{Category} & \textbf{Variables} \\
+\midrule
+Temperature & temperature\_2m, dew\_point\_2m, apparent\_temperature \\
+Humidity & relative\_humidity\_2m \\
+Precipitation & precipitation, rain \\
+Pressure & pressure\_msl, surface\_pressure \\
+Wind & wind\_speed\_10m, wind\_direction\_10m, wind\_gusts\_10m \\
+Other & cloud\_cover, is\_day, sunshine\_duration \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Data Quality Summary}
+
+\subsection{Pollutant Data}
+
+\begin{table}[H]
+\centering
+\caption{Pollutant Data Quality Metrics}
+\label{tab:pollutant_quality}
+\begin{tabular}{ll}
+\toprule
+\textbf{Metric} & \textbf{Value} \\
+\midrule
+Total Records & 4,938 \\
+Columns & 7 \\
+Duplicate Timestamps & 611 \\
+Hourly Gaps & 638 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Missing value rates: PM2.5 (2.88\%), PM10 (0.77\%), NO$_2$ (2.47\%), SO$_2$ (2.55\%), CO (3.24\%), O$_3$ (1.96\%).
+
+\subsection{Weather Data}
+
+The weather data contained 4,416 records with 15 columns, zero duplicates, zero hourly gaps, and no missing values.
+
+\subsection{Merged Dataset}
+
+After merging pollutant and weather data:
+\begin{itemize}
+    \item \textbf{Final Records}: 4,931
+    \item \textbf{Total Features}: 21
+    \item \textbf{Date Range}: 2025-06-01 07:00 UTC to 2025-12-01 23:00 UTC
+\end{itemize}
+
+\subsection{Missing Data Handling}
+
+\begin{enumerate}
+    \item \textbf{Linear Interpolation}: Applied on time index for small gaps ($<$ 3.3\%)
+    \item \textbf{Forward/Backward Fill}: Used for edge cases
+    \item \textbf{Result}: Zero null values in processed dataset
+\end{enumerate}
+
+\section{PM2.5 Time Series Visualization}
+
+Figure \ref{fig:timeseries} displays the hourly PM2.5 values over the last month of the study period. The chart reveals daily cyclic patterns typical of urban air pollution---concentrations tend to rise during morning and evening rush hours due to increased traffic and fall overnight. The visible day-to-day variability reflects weather influences (wind dispersing pollutants, rain washing particles from the air) and weekly patterns (lower pollution on weekends).
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]{Images/pm25_timeseries_last_month.png}
+    \caption{PM2.5 concentration over the last month of the study period.}
+    \label{fig:timeseries}
+\end{figure}
+
+\section{Feature Correlations}
+
+Figure \ref{fig:correlation} shows the correlation matrix for all 21 features. Key observations:
+\begin{itemize}
+    \item PM10 has the strongest correlation with PM2.5 (0.87), which is expected since both measure particulate matter from similar sources
+    \item CO, NO$_2$, and SO$_2$ show moderate positive correlations with PM2.5, indicating shared emission sources (vehicles, industry)
+    \item Wind speed shows negative correlation---higher winds disperse pollutants, reducing PM2.5 concentrations
+\end{itemize}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{Images/correlation_heatmap.png}
+    \caption{Correlation matrix showing relationships between all 21 features.}
+    \label{fig:correlation}
+\end{figure}

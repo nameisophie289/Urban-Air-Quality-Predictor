@@ -1,0 +1,78 @@
+\documentclass[12pt,a4paper]{report}
+\usepackage[utf8]{inputenc}
+\usepackage{tocloft,calc}
+\usepackage[top=3.5cm, bottom=3.0cm, left=3.5cm, right=2.0cm]{geometry}
+\setlength{\headheight}{14.5pt}
+\addtolength{\topmargin}{-2.5pt}
+
+\usepackage{amsmath,latexsym,amscd,amsfonts,mathrsfs,enumerate}
+\usepackage{upgreek}
+\usepackage{multirow}
+\usepackage{multicol}
+\usepackage{booktabs}
+\usepackage[mathscr]{eucal}
+\usepackage[unicode,colorlinks=true, bookmarks=true, pdfstartview=FitH]{hyperref}
+\hypersetup{
+  pdftitle={Urban Air Quality Predictor},
+  pdfauthor={Sophie Lam}, 
+  colorlinks = true,
+  linkcolor = black,
+  citecolor = blue,
+}
+
+\usepackage{pifont}
+\usepackage{float}
+\usepackage{placeins}
+\usepackage{mathtools}
+\usepackage{fancyhdr}
+\usepackage{graphicx}
+\usepackage{fancybox,cite}
+\allowdisplaybreaks
+\usepackage{setspace}
+\usepackage[table,xcdraw]{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, positioning}
+\usepackage{pdfpages}
+\usepackage{changepage}
+
+\onehalfspacing
+
+% Header/footer configuration
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{\it Urban Air Quality Predictor Project Report}
+\rhead{}
+\cfoot{\thepage}
+
+\begin{document}
+
+% --- COVER PAGE ---
+\pagenumbering{gobble}
+\input{contents/cover}
+\clearpage
+
+% --- FRONT MATTER: Roman numerals ---
+\pagenumbering{roman}
+\setcounter{page}{1}
+
+\tableofcontents
+\clearpage
+\listoffigures
+\clearpage
+\listoftables
+\clearpage
+
+% --- MAIN MATTER: Arabic numerals ---
+\pagenumbering{arabic}
+\setcounter{page}{1}
+
+\input{contents/sections/Chapter1}
+\input{contents/sections/Chapter2}
+\input{contents/sections/Chapter3}
+\input{contents/sections/Chapter4}
+
+\bibliographystyle{unsrt}
+\nocite{*}
+\bibliography{references}
+
+\end{document}

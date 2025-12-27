@@ -1,0 +1,41 @@
+================================================================================
+DATA QUALITY REPORT
+Generated: 2025-12-27 22:09:20
+================================================================================
+
+========================================
+POLLUTANT DATA
+========================================
+Rows: 4,938
+Columns: 7
+Duplicates: 611
+Hourly gaps: 638
+
+Missing values:
+  datetime: 0.00%
+  pm25: 2.88%
+  pm10: 0.77%
+  no2: 2.47%
+  so2: 2.55%
+  co: 3.24%
+  o3: 1.96%
+
+========================================
+WEATHER DATA
+========================================
+Rows: 4,416
+Columns: 15
+Duplicates: 0
+Hourly gaps: 0
+
+Missing values:
+  None
+
+========================================
+MERGED DATA
+========================================
+Rows: 4,931
+Columns: 21
+Column names: datetime, pm25, pm10, no2, so2, co, o3, temperature_2m, relative_humidity_2m, dew_point_2m, apparent_temperature, precipitation, rain, pressure_msl, surface_pressure, cloud_cover, wind_speed_10m, wind_direction_10m, wind_gusts_10m, is_day, sunshine_duration
+
+================================================================================
